@@ -1,0 +1,244 @@
+<html>
+<head>
+<title>Персонаж v0.0.2</title>
+<script src="js/jquery.js"></script>
+<link href="css/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<div class="battle_ground">
+<div id="b_area" class="area_pic"></div>
+<div class="pers w64">
+	<div id="pers" style="position:absolute;left:0px;">
+	<div class="p_art w64" style="background:url('images/pers/p_m.png')"></div>
+	<div id="p_body" class="p_art w64" style="background:url('')"></div>
+	<div id="p_bots" class="p_art w64" style="background:url('')"></div>
+	<div id="p_foot" class="p_art w64" style="background:url('')"></div>
+	<div id="p_sword" class="p_art w64" style="background:url('')"></div>
+	<div class="p_art w64" style="background:url('images/pers/p_m_hand.png')"></div>
+	
+	<div id="p_hand1" class="p_art w64" style="background:url('')"></div>
+	<div id="p_hand2" class="p_art w64" style="background:url('')"></div>
+	<div id="p_helm" class="p_art w64" style="background:url('')"></div>
+	</div>
+	<div id="pers_hp" class="hp" style="top:30px;display:none;"><b style="color:red;">-30HP</b></div>
+</div>
+<div class="bot w64">
+	<div id="bot" class="w64" style="position:absolute;left:64px;"></div>
+	<div id="bot_hp" class="hp" style="top:30px;display:none;"><b style="color:red;">-30HP</b></div>
+</div>
+<div id="hp_bars" style="display:none;">
+
+<div id="hp_bar" style="display: inline-block;">
+	<div id="hp_bar_pers">
+    <div id="hp_b_pers" class="hp_b" style="left: 0px;width:50px;"></div><div id="hp_pers" class="hp_con">1000/1000</div>
+	</div>
+</div>
+
+<div id="hp_bar" style="display: inline-block;margin-left: 10px;">
+	<div id="hp_bar_pers">
+    <div id="hp_b_mob" class="hp_b" style="left: 0px;width:50px;"></div><div id="hp_mob" class="hp_con">1000/1000</div>
+	</div>
+</div>
+
+</div>
+
+</div>
+
+<br>
+<div id="dospehi">
+<button onclick="put_on_slot('p_body','1_body.png');">Надеть доспех</button>
+<button onclick="put_off_slot('p_body');">Снять доспех</button>
+<br>
+<button onclick="put_on_slot('p_bots','1_bots.png');">Надеть ботинки</button>
+<button onclick="put_off_slot('p_bots');">Снять ботинки</button>
+<br>
+<button onclick="put_on_slot('p_foot','1_foot.png');">Надеть штаны</button>
+<button onclick="put_off_slot('p_foot');">Снять штаны</button>
+<br>
+<button onclick="put_on_slot('p_hand1','1_hand1.png');">Надеть наплечники</button>
+<button onclick="put_off_slot('p_hand1');">Снять наплечники</button>
+<br>
+<button onclick="put_on_slot('p_hand2','1_hand2.png');">Надеть наручи</button>
+<button onclick="put_off_slot('p_hand2');">Снять наручи</button>
+<br>
+<button onclick="put_on_slot('p_helm','1_helm.png');">Надеть шлем</button>
+<button onclick="put_off_slot('p_helm');">Снять шлем</button>
+<br>
+<button onclick="put_on_slot('p_sword','1_sword.png');">Надеть меч</button>
+<button onclick="put_off_slot('p_sword');">Снять меч</button>
+</div>
+
+<div id="activate_bots">
+	Выберите монастра
+	<button onclick="bot_trav(1);">Слизень</button>
+	<button onclick="bot_trav(2);">Ртутень</button>
+	<button onclick="bot_trav(3);">Мистер Хэнки</button>
+	<button onclick="bot_trav(4);">Паук</button>
+</div>
+
+<br>
+<!-- <button onclick="bot_attack(1);">Атака бота</button> -->
+<button id="attack_btn" onclick="pers_attack();" style="display:none;">Атака перса</button>
+<button id="start_btn" onclick="fight_start();">Начать бой</button>
+
+<script>
+var hp_pers_cur = 1000;
+var hp_pers_max = 1000;
+var hp_mob_cur = 3000;
+var hp_mob_max = 3000;
+var bar_width = 50;
+var active_bot = 0;
+var cur_fight = false;
+function put_on_slot(slot, img){
+	document.getElementById(slot).style.background = "url('images/complects/"+img+"')";
+}
+function put_off_slot(slot){
+	document.getElementById(slot).style.background = "";
+}
+function test_val_hp_mob(id){
+	if(id == 1){
+		hp_mob_cur = 50;
+		hp_mob_max = 50;
+	}
+	if(id == 2){
+		hp_mob_cur = 3000;
+		hp_mob_max = 3000;
+	}
+	if(id == 3){
+		hp_mob_cur = 150000;
+		hp_mob_max = 150000;
+	}
+	if(id == 4){
+		hp_mob_cur = 2000;
+		hp_mob_max = 2000;
+	}
+	if(id == 5){
+		hp_mob_cur = 500;
+		hp_mob_max = 500;
+	}
+}
+
+function bot_trav(id){
+	test_val_hp_mob(id);
+	active_bot = id;
+	var img = "bot_" + id;
+	document.getElementById('bot').style.background = "url('images/bots/"+img+".png')";
+}
+
+function fight_start(){
+	if(cur_fight) return false;
+	if(active_bot == 0) {alert('Сначала выберите монстра'); return false;}
+	cur_fight = true;
+	$('#hp_bars').show();
+	$('#dospehi').hide();
+	$('#start_btn').hide();
+	$('#activate_bots').hide();
+	$('#attack_btn').show();
+	load_area(1);
+	bot_trav(active_bot);
+	reinit_hp_bars();
+	bot_logic();
+}
+
+function bot_attack(){
+	if(!cur_fight) return false;
+	$("#bot").animate({left: "20px",}, 650, false, function() {
+		hp_minus_pers();
+	});
+	$("#bot").animate({left: "64px"}, 320);
+}
+function pers_attack(){
+	if(!cur_fight) return false;
+	$("#pers").animate({left: "50px",}, 650, false, function() {
+		hp_minus_bot();
+	});
+	$("#pers").animate({left: "0px"}, 320);
+}
+function hp_minus_bot(){
+	var val = parseInt(getRandomArbitary(10,60));
+	var hp_bot = $("#bot_hp");
+	hp_bot.css('top',30);
+	hp_bot.show();
+	var block = parseInt(getRandomArbitary(1,100));
+	var uvorot = parseInt(getRandomArbitary(1,100));
+	if(block > 80){
+		val = 0;
+		hp_bot.html('<b style="color:blue;">BLOCK</b>');
+	}else if(uvorot > 85){
+		hp_bot.html('<b style="color:green;">UVOROT</b>');
+	}else{
+		hp_bot.html('<b style="color:red;">-'+val+'HP</b>');
+	}
+	hp_bot.animate({top: "5px",}, 500, false, function() {
+		hp_bot.css('display','none');
+	});
+	hp_mob_cur -= val;
+	if(hp_mob_cur < 0){
+		hp_mob_cur = 0;
+		alert_msg_battle('Вы выйграли!');
+		
+	}
+	reinit_hp_bars();
+}
+function hp_minus_pers(){
+	var val = parseInt(getRandomArbitary(5,10));
+	var hp_bot = $("#pers_hp");
+	hp_bot.css('top',30);
+	hp_bot.show();
+	var block = parseInt(getRandomArbitary(1,100));
+	var uvorot = parseInt(getRandomArbitary(1,100));
+	if(block > 80){
+		val = 0;
+		hp_bot.html('<b style="color:blue;">BLOCK</b>');
+	}else if(uvorot > 85){
+		hp_bot.html('<b style="color:green;">UVOROT</b>');
+	}else{
+		hp_bot.html('<b style="color:red;">-'+val+'HP</b>');
+	}
+	hp_bot.animate({top: "5px",}, 500, false, function() {
+		hp_bot.css('display','none');
+	});
+	hp_pers_cur -= val;
+	if(hp_pers_cur < 0){
+		hp_pers_cur = 0;
+		alert_msg_battle('Вы проиграли!');
+	}
+	reinit_hp_bars();
+}
+
+function alert_msg_battle(message){
+	$('#b_area').html(message);
+}
+
+function getRandomArbitary(min, max){
+  return Math.random() * (max - min) + min;
+}
+
+function reinit_hp_bars(){
+	$('#hp_pers').html(hp_pers_cur + '/' + hp_pers_max);
+	$('#hp_mob').html(hp_mob_cur + '/' + hp_mob_max);
+	var pers_perc = ((bar_width / 100) * 100) * (hp_pers_cur / hp_pers_max);
+	var mob_perc = ((bar_width / 100) * 100) * (hp_mob_cur / hp_mob_max);
+	console.log(pers_perc);
+	console.log(mob_perc);
+	$('#hp_b_pers').animate({width: pers_perc,}, 500);
+	$('#hp_b_mob').animate({width: mob_perc,}, 500);
+}
+
+
+function bot_logic(){
+	if(!cur_fight || hp_mob_cur <= 0) return false;
+	bot_attack();
+	var val = parseInt(getRandomArbitary(1,3));
+	var timeout = val * 1000;
+	console.log('time' + timeout);
+	setTimeout('bot_logic()', timeout);
+	
+}
+function load_area(area_id){
+	document.getElementById('b_area').style.background = "url('images/b_area/"+area_id+".png')";
+}
+
+</script>
+</body>

@@ -1,0 +1,56 @@
+.battle_ground{
+	background: url('../images/battle_ground.png') no-repeat;
+	width:132px;
+	height:100px;
+	padding: 8px 0px 0px 7px;
+    position: relative;
+}
+.pers{
+	display: inline-block;
+}
+.p_art{
+	position:absolute;
+}
+.w64{
+	width:64px;
+	height:64px;
+}
+.bot{
+	display: inline-block;
+}
+.hp{
+	position:absolute;
+    color: red;
+    font-size: 12px;
+    font-family: cursive;
+}
+.hp_b{
+	width: 50px;
+	height: 10px;
+	background: #EE6B47;
+	position: relative;
+}
+#hp_bar_pers{
+	outline: 1px solid #E8C48E;
+    width: 50px;
+    height: 10px;
+	font-size: 8px;
+	text-align: center;
+	position: relative;
+}
+.hp_con{
+	position: absolute;
+	top: 0px;
+}
+.area_pic{
+	position: absolute;
+    left: 4px;
+    top: 4px;
+    width: 122px;
+    height: 92px;
+    display: block;
+    text-align: center;
+    vertical-align: -webkit-baseline-middle;
+    color: red;
+    font-weight: bold;
+}
